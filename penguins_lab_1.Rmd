@@ -51,3 +51,40 @@ penguins2 <- penguins %>%
 -Levenne's tests for equal variances
 -one-way ANOVA
 -pot-hoc test
+
+```{r}
+
+hists <- ggplot(penguins2, aes(x = flipper_length)) +
+  geom_histogram(aes(fill = common_name)) +
+  facet_wrap(~ common_name)
+
+hists
+
+qqs <- ggplot(penguins2, aes(sample = flipper_length)) +
+  geom_qq() +
+  facet_wrap(~ common_name)
+
+qqs
+
+# Levene's test for equal variances ( greater than 2 groups.... if you have two groups, use the F test for equal variances)
+
+# We will use the funtion leveneTest form the 'car' package
+
+#H0: Variances equal
+#HA: Variances unequal
+
+penguin_levene <- leveneTest(flipper_length ~ common_name, data = penguins2) #testing variances of flipper lenght between diff species
+penguin_levene
+
+# We retain the null hypothesis of equal variances (p = 0.06)
+
+variances <- penguins2 %>% # to create a summary table to represent the variances of the three different groups
+  group_by(common_name) %>% 
+  summarize(
+    variance = var(flipper_length)
+  )
+
+variances # see the variances are similar enough
+
+```
+
