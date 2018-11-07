@@ -46,6 +46,8 @@ penguins2 <- penguins %>%
 
 ```
 
+2.
+
 -Exploratory graphs
 -Summary statistics
 -Levenne's tests for equal variances
@@ -87,4 +89,36 @@ variances <- penguins2 %>% # to create a summary table to represent the variance
 variances # see the variances are similar enough
 
 ```
+
+
+#3. One-way ANOVA
+
+Single factor: common_name (species)
+Number of levels in factor: 3 (diff species)
+Random variable: fipper_length (mm)
+
+Is there a sig diff in mean flipper length (mm) for female Chinstrap, Gentoo, and Adelie penguins?
+
+```{r}
+
+#one-way ANOVA in base R
+
+# H0: Mean flipper lengths across all species are equal
+# HA: At LEAST two means differ significantly
+
+penguin_aov <- aov(flipper_length ~ common_name, data = penguins2) #comparing flipper length among the species in the penguins dataframe
+summary(penguin_aov) # use summary to view the stats info
+
+# At least two samples were taken from populations with differenct means. Which ones are different? All three differenct from each other? Or something else?
+
+# Post-hoc testing using Tukey's HSD
+
+penguin_ph <- TukeyHSD(penguin_aov)
+penguin_ph
+
+
+```
+
+Mean flipper lengths for Adelie, Gentoo, and Chinstrap penguins are all sig diff (F(df) = stat, p < 0.0001, $\alpha$ = 0.05 with post-hoc Tukey's HSD, $\alpha$ = 0.05).
+
 
